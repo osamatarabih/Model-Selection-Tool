@@ -1,0 +1,30 @@
+{
+    "working_dir": "C:/Osama Tarabih/Generalized Modeling Framework",
+    "available_models_file": "./Available_Models.csv",
+    "water_body_type": "Watershed",
+    "watershed_size": "Medium",
+    "watershed_type": [
+        "Agricultural, Urban"
+    ],
+    "model_parameters": [
+        "Q",
+        "TP",
+        "TN"
+    ],
+    "time_step": "Daily",
+    "simulation_objectives": [
+        "Holistic Simulation",
+        "BMP locations"
+    ],
+    "model_complexity": "Complex",
+    "model_availability": "Open source",
+    "model_limitations": [
+        "manual calibration",
+        "can not be coupled with optimization algorithm"
+    ],
+    "weights": {
+        "SimObj_S": 0.2,
+        "Data_S": 0.4,
+        "ModLimit_S": 0.4
+    }
+}
