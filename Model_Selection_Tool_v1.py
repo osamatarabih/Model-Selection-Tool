@@ -21,6 +21,7 @@ Available_Models['ModLimit_S'] = Available_Models['Model Limitations'].apply(lam
 
 # Extract inputs from config
 WaterBodyType = [config["water_body_type"]]
+Location = [config["Location"]]
 WatershedSize = [config["watershed_size"]] #Single Input (String)
 WaterbodySize = [config["waterbody_size"]]
 WatershedType = config["watershed_type"] # Multiple Inputs (List)
@@ -34,7 +35,6 @@ Model_Availability = [config["model_availability"]]
 Model_Limitations = config["model_limitations"]
 
 Available_Models['Model Limitations'] = Available_Models['Model Limitations'].fillna('')
-
 # Filter the models based on inputs
 # Check if WaterBodyType is 'water body' or 'watershed' and adjust filters accordingly
 if 'water body' in WaterBodyType:
@@ -51,19 +51,25 @@ if 'water body' in WaterBodyType:
         (Available_Models['Model Availability'].str.contains('|'.join(Model_Availability), case=False)) &
         (~Available_Models['Model Limitations'].str.contains('|'.join(Model_Limitations), case=False))
     ]
-elif 'watershed' in WaterBodyType:
+elif 'Watershed' in WaterBodyType:
+    if 'Other' not in Location:
+        filtered_models = Available_Models[
+            Available_Models['Location'].str.contains('|'.join(Location), case=False, na=False)
+            ]
+    else:
     # Filtering for watersheds
-    filtered_models = Available_Models[
-        (Available_Models['Water Body Type'].str.contains('|'.join(WaterBodyType), case=False)) &
-        (Available_Models['Watershed Size'].str.contains('|'.join(WatershedSize), case=False)) &
-        (Available_Models['Watershed Type'].str.contains('|'.join(WatershedType), case=False)) &
-        (Available_Models['Parameters'].str.contains('|'.join(Model_Parameters), case=False)) &
-        (Available_Models['Time Step'].str.contains('|'.join(Time_step), case=False)) &
-        (Available_Models['Simulation Objectives'].str.contains('|'.join(selected_objectives), case=False)) &
-        (Available_Models['Model Complexity'].str.contains('|'.join(Model_Complexity), case=False)) &
-        (Available_Models['Model Availability'].str.contains('|'.join(Model_Availability), case=False)) &
-        (~Available_Models['Model Limitations'].str.contains('|'.join(Model_Limitations), case=False))
-    ]
+        filtered_models = Available_Models[
+            (Available_Models['Water Body Type'].str.contains('|'.join(WaterBodyType), case=False)) &
+            # (Available_Models['Location'].str.contains('|'.join(Location), case=False)) &
+            (Available_Models['Watershed Size'].str.contains('|'.join(WatershedSize), case=False)) &
+            (Available_Models['Watershed Type'].str.contains('|'.join(WatershedType), case=False)) &
+            (Available_Models['Parameters'].str.contains('|'.join(Model_Parameters), case=False)) &
+            (Available_Models['Time Step'].str.contains('|'.join(Time_step), case=False)) &
+            (Available_Models['Simulation Objectives'].str.contains('|'.join(selected_objectives), case=False)) &
+            (Available_Models['Model Complexity'].str.contains('|'.join(Model_Complexity), case=False)) &
+            (Available_Models['Model Availability'].str.contains('|'.join(Model_Availability), case=False)) &
+            (~Available_Models['Model Limitations'].str.contains('|'.join(Model_Limitations), case=False))
+        ]
 else:
     # Default filtering if WaterBodyType is not specifically 'water body' or 'watershed'
     filtered_models = Available_Models[
